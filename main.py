@@ -19,26 +19,22 @@ def handle_bridge():
         parts = raw_body.split('\n', 3)
 
         if len(parts) < 4:
-            return jsonify({"error": "Invalid protocol format"}), 400
+            return jsonify({"error": "Invalid protocol"}), 400
 
         req_type = parts[0]
-        process_id = parts[1]
+        pid = parts[1]
         settings = json.loads(parts[2])
         payload = parts[3]
 
-        response_data = ""
+        response = ""
 
-        if req_type == "connect":
-            print(f"[Bridge] Client connected: {process_id}")
-            response_data = "Connected"
+        if req_type == "print":
+            print(payload)
+            response = "success"
+        elif req_type == "test":
+            response = "Bridge Connected"
         
-        elif req_type == "print":
-            print(f"[Lua] {payload}")
-            response_data = "Printed"
-
-     
-
-        return str(response_data)
+        return str(response)
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
