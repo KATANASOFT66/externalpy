@@ -3,7 +3,20 @@ local BridgeUrl = "http://127.0.0.1:5000"
 local ProcessID = game.JobId or "0000"
 local resc = 3
 
-local function nukedata(dta, typ, set)
+local env = getfenv()
+
+env._G = env
+env.shared = {}
+env.getgenv = function()
+	return env
+end
+
+env.identifyexecutor = function()
+	return "ZENIX", "1.0.1"
+end
+env.getexecutorname = env.identifyexecutor
+
+env.nukedata = function(dta, typ, set)
 	local timeout = 25
 	local result, clock = nil, tick()
 
@@ -50,6 +63,3 @@ local function nukedata(dta, typ, set)
 	end
 	return result and result.Body or ""
 end
-
--- Usage Example
-nukedata("Hello form Lua", "print", {})
